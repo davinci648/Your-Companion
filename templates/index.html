@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Your Companion Bot</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
+	<link rel="icon" type="image/png" href="/static/img/favicon.jpg" />
+	<script type="text/javascript" src="/static/app.js"></script>
+	<script src="https://use.fontawesome.com/6d01efcfaa.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:800" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body ng-app="ahunaApp" ng-controller="MainCtrl" class="container" background="/static/img/background.jpg">
+	<h1 class="col-sm-12 col-md-12 col-lg-12">Welcome to yourCompanion Bot!</h1>
+	<div id="menu">
+		<div id="home"><a href="/"><i class="fa fa-home" aria-hidden="true"></i></a></div>
+		<div id="settings"><a href="#"><i class="fa fa-cog" aria-hidden="true"></i></a></div>
+	</div>
+	<div id="convo" class="col-sm-8 col-md-8 col-lg-8">
+		<div id="bot-msg">
+				<p id="bot-head">yourCompanion:</p>
+				<p id="bot">Hi there! What's your name?</p>
+		</div>
+		<hr />
+		<div class="holder" ng-repeat="msg in conversation track by $index">
+			<div ng-if="msg.author == 'bot'" id="bot-msg">
+				<p id="bot-head">yourCompanion:</p>
+				<p id="bot">{{msg.text}}</p>
+			</div>
+			<div ng-if="msg.author == 'user'" id="user-msg">
+				<p id="msg-head">You:</p>
+				<p id="user">{{msg.text}}</p>
+			</div>
+		</div>
+		<div id="loading" ng-if="newOut"><i class="fa fa-spinner spin" aria-hidden="true"></i></div>
+	</div>
+	<div class="form-group" id="form">
+		<input class="form-control" id="input" type="text" placeholder="Type here" ng-model="text" />
+		<button id="send" ng-click="handleInput(text)" class="btn btn-primary"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+	</div>
+	<div id="footer">
+		<h2>yourCompanion Bot is available via SMS!</h2>
+		<p>Text yourCompanion Bot at (253)343-9145!</p>
+	</div>
+</body>
+</html>
