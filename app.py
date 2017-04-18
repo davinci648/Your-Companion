@@ -11,11 +11,6 @@ from random import randint
 # Declares flask app
 app = Flask(__name__)
 
-# MySQL setup
-# mysql = MySQL()
-# mysql.init_app(app)
-# cursor = mysql.get_db().cursor()
-
 # For Twilio
 client = TwilioRestClient(settings['sid'], settings['auth'])
 twilio_number = '(253) 343-9145'
