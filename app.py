@@ -60,7 +60,7 @@ for conversation in conversations:
 # Main front-end endpoint
 @app.route('/')
 def intro():
-	return render_template('intro.html')
+	return render_template('chat.html')
 
 @app.route('/login')
 def login():
