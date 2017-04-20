@@ -94,11 +94,11 @@
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Recommend Movie</a>
                                         </h4>
                                     </div>
-                                    <button type="button" class="btn btn-default">Comedy</button>
-                            <button type="button" class="btn btn-default">Motivational</button>
-                            <button type="button" class="btn btn-default">Feel-Good</button>
+                                    <button id="com_mov" type="button" onclick="com_mov_recomm()" class="btn btn-default">Comedy</button>
+                            <button id="mot_mov" type="button" class="btn btn-default" onclick="mot_mov_recomm()">Motivational</button>
+                            <button id="feel_good_mov" type="button" class="btn btn-default" onclick="feel_good_mov_recomm()">Feel-Good</button>
                                     <div id="collapseOne" class="panel-collapse collapse in">
-                                        <div class="panel-body">
+                                        <div id="mov_output" class="panel-body">
                                         </div>
                                     </div>
                                 </div>
@@ -149,6 +149,52 @@
     }
 
     </script>
+
+    <script type="text/javascript">
+        let com_mov_recomm = function(){
+        let xmlHttp_com_mov = new XMLHttpRequest();
+        xmlHttp_com_mov.open( "GET", '/com_mov', false ); // false for synchronous request
+        xmlHttp_com_mov.send( null );
+
+        let dat_com_mov = xmlHttp_com_mov.responseText;
+
+        console.log("I'm Here\n");
+        var node = document.getElementById('mov_output');
+        document.getElementById('mov_output').value = "";
+        node.innerHTML = "<p> "+ dat_com_mov +" </p>";
+        }
+    </script>
+
+    <script type="text/javascript">
+        let mot_mov_recomm = function(){
+        let xmlHttp_mot_mov = new XMLHttpRequest();
+        xmlHttp_mot_mov.open( "GET", '/mot_mov', false ); // false for synchronous request
+        xmlHttp_mot_mov.send( null );
+
+        let dat_mot_mov = xmlHttp_mot_mov.responseText;
+
+        console.log("I'm Here\n");
+        var node = document.getElementById('mov_output');
+        document.getElementById('mov_output').value = "";
+        node.innerHTML = "<p> "+ dat_mot_mov +" </p>";
+        }
+    </script>
+
+    <script type="text/javascript">
+        let feel_good_mov_recomm = function(){
+        let xmlHttp_feel_good_mov = new XMLHttpRequest();
+        xmlHttp_feel_good_mov.open( "GET", '/com_mov', false ); // false for synchronous request
+        xmlHttp_feel_good_mov.send( null );
+
+        let dat_feel_good_mov = xmlHttp_feel_good_mov.responseText;
+
+        console.log("I'm Here\n");
+        var node = document.getElementById('mov_output');
+        document.getElementById('mov_output').value = "";
+        node.innerHTML = "<p> "+ dat_feel_good_mov +" </p>";
+        }
+    </script>
+
 
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
