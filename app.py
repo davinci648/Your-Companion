@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import render_template,Flask,jsonify,request
 from flaskext.mysql import MySQL
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
@@ -104,26 +104,27 @@ def recommend_feel_good_mov():
 
 
 mainTags = {0: {0:'panic attack',1:'panic'},1:{0:'suicide',1: 'kill'},2:{0:'break'}} 
-# Determines which group the message belongs to
-resources = {
+# To check which helpline the person should be pointed to.
+helplines = {
  	0: 
- 		{
+ 		{		# For panic attacks
  			0:{'type':'url','data':'www.welcomecure.com'}, 
  		 	1:{'type':'phone-number','data': '9833598553'}}, 
 	1: 
- 	 	{
+ 	 	{      # For suicide prevention
  	 		0:{'type':'url','data':'www.vandrevalafoundation.com'}, 
  	 		1:{'type':'phone-number','data':'18602662345'}},
  	 2: 
- 	 	{
+ 	 	{     # For love and breakup related incidents
  	 		0:{'type':'url','data':'www.therulesrevisited.com'}, 
  	 		1:{'type':'phone-number','data':'18602662345'}},
  }
 
-concerned_options = ["I am so sorry to hear that. Please tell me more.", "do you feel something has gone wrong ?", "You can talk with me.", "do you need to vent?", "do you want to talk?", "I'm here for you."]
+#To show that the chatbot is concerned . It creates a more informal and caring "artificial" attitude of the chatbot.
+concerned_options=["I am so sorry to hear that. Please tell me more.", "do you feel something has gone wrong ?", "You can talk with me.", "do you want to vent?", "do you want to talk?","I am here for you."]
 
 
-# Handles receiving a web message
+# To handle the chat requests
 @yourCompanion.route('/api/chat/receive', methods=['GET'])
 def process_message():
 	inputUser = request.values.get('text')
@@ -141,16 +142,16 @@ def process_message():
 	else: #Very critical
 		outputUser = None
 		tags = tagger.pipe(lemmatizerAlgo.pipe(inputUser).result)
-		for a in tags.result:
-			for x in mainTags:
-				for y in mainTags[x]:
-					if a == mainTags[x][y]:
-						rand = randint(0, 1)
-						outputUser = resources[x][rand]['data']
+		for tag in tags.result:
+			for x_i in mainTags:
+				for y_i in mainTags[x]:
+					if tag == mainTags[x_i][y_i]:
+						randomInt = randint(0,1)
+						outputUser = helplines[x_i][randomInt]['data']
 		if outputUser is None:
-			outputUser = concerned_options[randint(0, 6)]
-		return jsonify({'text': outputUser})
+			outputUser = concerned_options[randint(0,6)]
+		return jsonify({'text':outputUser})
 
 
-if __name__ == '__main__':
+if __name__=='__main__':
   yourCompanion.run(debug = True)
