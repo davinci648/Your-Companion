@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-from credentials import settings
 from flaskext.mysql import MySQL
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
@@ -15,14 +14,7 @@ auth = requests.auth.HTTPProxyAuth('username', 'passwd')
 
 # Changes Jinja's expression blocks so angular can work
 jinja_options = yourCompanion.jinja_options.copy()
-jinja_options.update(dict(
-    block_start_string='<%',
-    block_end_string='%>',
-    variable_start_string='%%',
-    variable_end_string='%%',
-    comment_start_string='<#',
-    comment_end_string='#>',
-))
+jinja_options.update(dict(block_start_string='<%',block_end_string='%>',variable_start_string='%%',variable_end_string='%%',comment_start_string='<#',comment_end_string='#>',))
 yourCompanion.jinja_options = jinja_options
 
 # Setup Algorithmia
