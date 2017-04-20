@@ -1,0 +1,32 @@
+To run please install the following requirements: 
+
+	algorithmia	
+	enum34
+	Flask
+	MarkupSafe
+	nltk
+	oauthlib
+	plivo
+	requests
+	Flask-MySQL
+	future
+	fuzzywuzzy
+	httplib2
+	itsdangerous
+	Jinja2
+	ChatterBot
+	click
+	PyMySQL
+	PySocks
+	python-twitter
+	pytz
+	jsondatabase
+	requests-oauthlib
+	six
+	textblob
+	Werkzeug
+	python==2.7
+
+Before running please ensure you have your enviorment variables set for proxy (both http and https).
+
+Type this in the command line: ./start.sh
