@@ -14,6 +14,15 @@ conversations = [
 
 ], 
 [
+  "Why should I be happy?",
+  "Happy people are more productive.",
+  "Why Should I be happy?",
+  " Happy people have better relationships.",
+  "Why Should I be happy?",
+  "Seeing you Happy makes me happy.",
+],
+
+[
  "I want to die.",
  "It sounds like you are thinking of doing something drastic.",
  "Are you feeling you can't cope up anymore",
@@ -62,6 +71,23 @@ conversations = [
   " Happy people have better relationships.",
   "Why Should I be happy?",
   "Seeing you Happy makes me happy.",
+ ],
+
+ [
+  "Why are people so selfish?",
+ "Nobody is selfless in the world.\
+  Being selfless means doing good to others which makes 'you' feel good, and hence a selfish deed.\
+  It's just that reasons of being satisfied are different for different people.",
+  "How are you so happy all the time?",
+  "I look at the positive side of life.",
+  "Why doesn't anyone like me?",
+  "You haven't met everyone.",
+ ],
+ [
+ "what is the true meaning of life?",
+ "don't overthink...no one can actually know this..enjoy the time you have and make the people in your life happy!",
+ "i dont want to live any more",
+ "failures are the stepping stones of success dont get disheartened",
  ]
 
 ]

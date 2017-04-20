@@ -1,44 +1,23 @@
-from flask import Flask, render_template, request, jsonify
-from twilio.rest import Client as TwilioRestClient
-from twilio import twiml
-from credentials import settings
-import requests
+from flask import render_template,Flask,jsonify,request
 from flaskext.mysql import MySQL
-import Algorithmia
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from random import randint
 from ourDataset import conversations
-import random
-import json
-#import requests_cache
-import requests
+import requests,Algorithmia, random, json, requests
 
 # Declares flask app
-app = Flask(__name__)
+yourCompanion = Flask(__name__)
 
 proxies = {'http':'http://202.141.80.24:3128', 'https':'https://202.141.80.24:3128'}
 auth = requests.auth.HTTPProxyAuth('p.shetty', 'hacker6pro')
 
-
-# For Twilio
-client = TwilioRestClient(settings['sid'], settings['auth'])
-twilio_number = '(253) 343-9145'
-
 # Changes Jinja's expression blocks so angular can work
-jinja_options = app.jinja_options.copy()
-jinja_options.update(dict(
-    block_start_string='<%',
-    block_end_string='%>',
-    variable_start_string='%%',
-    variable_end_string='%%',
-    comment_start_string='<#',
-    comment_end_string='#>',
-))
-app.jinja_options = jinja_options
+jinja_options = yourCompanion.jinja_options.copy()
+jinja_options.update(dict(block_start_string='<%',block_end_string='%>',variable_start_string='%%',variable_end_string='%%',comment_start_string='<#',comment_end_string='#>',))
+yourCompanion.jinja_options = jinja_options
 
-# Algorithmia setup
-# apiKey = 'simwZCh9tS6b81wSwLtrdIauZhi1'
+# Setup Algorithmia
 apiKey = 'sim1ulkiERNnkZbh+wYGWAQry3M1'
 client = Algorithmia.client(apiKey)
 lemmatizerAlgo= client.algo('StanfordNLP/Lemmatizer/0.1.0')
@@ -47,48 +26,20 @@ tagger = client.algo('nlp/AutoTag/1.0.0')
 profanityDetector = client.algo('nlp/ProfanityDetection/0.1.2')
 
 # ChatBot Stuff
-chatbot = ChatBot(
-	'yourCompanion',
-	trainer='chatterbot.trainers.ChatterBotCorpusTrainer', 
-	storage_adapter="chatterbot.storage.JsonFileStorageAdapter", 
-	logic_adapters=[
-        'chatterbot.logic.MathematicalEvaluation',
-        'chatterbot.logic.TimeLogicAdapter'
-    ],
-	database="./database.json")
-# chatbot.train("chatterbot.corpus.english.conversations")
-# chatbot.train("chatterbot.corpus.english.greetings")
+chatbot=ChatBot('yourCompanion',trainer='chatterbot.trainers.ChatterBotCorpusTrainer',storage_adapter="chatterbot.storage.JsonFileStorageAdapter",database="./database.json")
 chatbot.set_trainer(ListTrainer)
 
 for conversation in conversations:
 	chatbot.train(conversation)
 
-# chatterbot.train
 
 # Main front-end endpoint
-@app.route('/')
+@yourCompanion.route('/')
 def intro():
 	return render_template('chat.html')
 
-@app.route('/login')
-def login():
-	return render_template('log-in.html')
 
-@app.route('/signup')
-def signin():
-	return render_template('sign-in.html')
-
-@app.route('/chat')
-def chat():
-	return render_template('index.html')
-
-@app.route('/settings')
-def settings():
-	return render_template('settings.html')
-
-
-
-@app.route('/com_mov', methods=['POST','GET'])
+@yourCompanion.route('/com_mov', methods=['POST','GET'])
 def recommend_comedy_mov():
 	file = open("comedy_movies.txt",'r')
 	com_mov_list = []
@@ -109,7 +60,7 @@ def recommend_comedy_mov():
 	print "==========================================================="
 	return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
 
-@app.route('/mot_mov', methods=['POST','GET'])
+@yourCompanion.route('/mot_mov', methods=['POST','GET'])
 def recommend_motivational_mov():
 	file = open("motivational_movies.txt",'r')
 	mot_mov_list = []
@@ -130,7 +81,7 @@ def recommend_motivational_mov():
 	print "==========================================================="
 	return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
 
-@app.route('/feel_good_mov', methods=['POST','GET'])
+@yourCompanion.route('/feel_good_mov', methods=['POST','GET'])
 def recommend_feel_good_mov():
 	file = open("feel_good_movies.txt",'r')
 	feel_good_mov_list = []
@@ -153,84 +104,56 @@ def recommend_feel_good_mov():
 	#print temp1
 	#return temp1
 
-# Handle receiving text messages
-@app.route('/api/receive', methods=['POST'])
-def recieve_sms():
-	from_number = requests.values.get('From', None)
-	to_number = requests.values.get('To', None)
-	text = requests.values.get('Text', None)
-	nums[from_number].append(from_msg)
-	res = twiml.Response()
-	res.message("Got your message!")
-	return str(res)
 
-# Handle sending back text messages
-@app.route('/api/messages/', methods=['GET', 'POST'])
-def show_messages():
-	if len(nums) == 0:
-		return "No messages. Send one to " + twilio_number + " to start!"
-	else:
-		return flask.jsonify(nums)
-
-mainTags = {
+mainTags = {0: {0:'panic attack',1:'panic'},1:{0:'suicide',1: 'kill'},2:{0:'break'}} 
+# To check which helpline the person should be pointed to.
+helplines = {
  	0: 
- 		{
- 			0: 'panic attack', 
- 			1: 'panic'}, 
- 	1: 
- 		{
- 			0: 'suicide', 
- 			1: 'kill'}, 
- 	2: 
- 		{
- 			0: 'break'}
-} 
-# Determines which group the message belongs to
-resources = {
- 	0: 
- 		{
- 			0: {'type': 'url', 'data': 'https://www.lifeline.org.au/Get-Help/Facts---Information/Panic-Attacks/Panic-Attacks'}, 
- 		 	1: {'type': 'phone-number', 'data': '800-64-PANIC'}}, 
+ 		{		# For panic attacks
+ 			0:{'type':'url','data':'www.welcomecure.com'}, 
+ 		 	1:{'type':'phone-number','data': '9833598553'}}, 
 	1: 
- 	 	{
- 	 		0: {'type': 'url', 'data': 'http://suicidepreventionlifeline.org/#'}, 
- 	 		1: {'type': 'phone-number', 'data': '1-800-273-8255'}},
+ 	 	{      # For suicide prevention
+ 	 		0:{'type':'url','data':'www.vandrevalafoundation.com'}, 
+ 	 		1:{'type':'phone-number','data':'18602662345'}},
  	 2: 
- 	 	{
- 	 		0: {'type': 'url', 'data': 'http://www.7cups.com/how-to-get-over-a-breakup/'}, 
- 	 		1: {'type': 'phone-number', 'data': '741-741'}},
+ 	 	{     # For love and breakup related incidents
+ 	 		0:{'type':'url','data':'www.therulesrevisited.com'}, 
+ 	 		1:{'type':'phone-number','data':'18602662345'}},
  }
 
-concerned_option = ["Oh no. Tell me more.", "What's up?", "Is something wrong?", "Talk to me.", "Need to vent?", "Need to talk?", "I'm here for you.", "I'm listening."]
+#To show that the chatbot is concerned . It creates a more informal and caring "artificial" attitude of the chatbot.
+concerned_options=["I am so sorry to hear that. Please tell me more.", "do you feel something has gone wrong ?", "You can talk with me.", "do you want to vent?", "do you want to talk?","I am here for you."]
 
 
-
-# Handles receiving a web message
-@app.route('/api/chat/receive', methods=['GET'])
+# To handle the chat requests
+@yourCompanion.route('/api/chat/receive', methods=['GET'])
 def process_message():
-	text = request.values.get('text')
-	response = sentimentDetector.pipe(text)
-	result = response.result
-	if result >= 2: # Good, Okay, or Conversational
-		res = chatbot.get_response(text).text
-		res_prof = profanityDetector.pipe(res).result
+	inputUser = request.values.get('text')
+	#First check the sentiment
+	result = sentimentDetector.pipe(inputUser).result
+
+	#Check if sentiment is very negative
+	if result >= 2: 
+		outputUser = chatbot.get_response(inputUser).text
+		res_prof = profanityDetector.pipe(outputUser).result
 		if len(res_prof) != 0:
-			res = "Sorry, I couldn't understand that."
-		return jsonify({'text': res})
-	else: # Poor to extremely bad
-		res = None
-		con = lemmatizerAlgo.pipe(text)
-		tags = tagger.pipe(con.result)
-		for a in tags.result:
-			for x in mainTags:
-				for y in mainTags[x]:
-					if a == mainTags[x][y]:
-						rand = randint(0, 1)
-						res = resources[x][rand]['data']
-		if res is None:
-			res = concerned_option[randint(0, 6)]
-		return jsonify({'text': res})
+			outputUser = "Sorry, Please try something else."
+		return jsonify({'text': outputUser})
+
+	else: #Very critical
+		outputUser = None
+		tags = tagger.pipe(lemmatizerAlgo.pipe(inputUser).result)
+		for tag in tags.result:
+			for x_i in mainTags:
+				for y_i in mainTags[x]:
+					if tag == mainTags[x_i][y_i]:
+						randomInt = randint(0,1)
+						outputUser = helplines[x_i][randomInt]['data']
+		if outputUser is None:
+			outputUser = concerned_options[randint(0,6)]
+		return jsonify({'text':outputUser})
 
 
-if __name__ == '__main__':
-  app.run(debug = True)
+if __name__=='__main__':
+  yourCompanion.run(debug = True)
