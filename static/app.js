@@ -9,6 +9,7 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 	var convo = document.getElementById('convo');
 
 	$scope.handleInput = function(text) {
+		console.log("xxx");
 		$scope.text = "";
 		$scope.conversation.push({text: text, author: 'user'});
 		$scope.newOut = true;

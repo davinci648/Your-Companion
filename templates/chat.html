@@ -24,6 +24,8 @@
 
     <!-- Custom Fonts -->
     <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script src="https://use.fontawesome.com/6d01efcfaa.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -50,57 +52,26 @@
         <br>
         <br>
 <div class="col-lg-12" >
-                    <div class="chat-panel panel panel-default" style="opacity:0.90">
+                    <div class="chat-panel panel panel-default" style="opacity:0.90" id = "chatbot">
                         <div class="panel-heading" >
                             <i class="fa fa-comments fa-fw"></i> Chat With Your Companion
                             
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body" >
-                            <ul class="chat">
+                            <ul class="chat" id="userchat">
+                                <li>
                                 
-                                <li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="/static/img/avatarcnsrg-800.png" height="60px" width="60px" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                    
-
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <strong class="primary-font">Your Companion:</strong>
-                                            
-                                        </div>
-                                        <p>
-                                            Hi there! What's your name?
-                                        </p>
-                                    </div>
+                                <div style='text-align: left'><strong><img src='/static/img/avatarcnsrg-800.png' height='60px' width='60px' class='img-circle'/>YuCo:</strong> Hello</div>
                                 </li>
-
-                            <div ng-if="msg.author == 'user'" id="bot-msg">
-                                <li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <strong class="pull-right primary-font">You:</strong>
-                                        </div>
-                                        <p>
-                                            User
-                                        </p>
-                                    </div>
-                                </li>
-                        
-                                
-                            </div>
                             </ul>
                         </div>
                         <!-- /.panel-body -->
                         <div class="panel-footer">
                             <div class="input-group">
-                                <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                                <input id="btn-input" type="text" class="form-control input-sm"  placeholder="Type your message here..." />
                                 <span class="input-group-btn">
-                                    <button id="send" ng-click="handleInput(text)" class="btn btn-warning btn-sm"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                                    <button id="send" onclick="f()" class="btn btn-warning btn-sm"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
                                 </span>
                             </div>
                         </div>
@@ -155,6 +126,30 @@
     <!-- jQuery -->
     <script src="/static/vendor/jquery/jquery.min.js"></script>
 
+    <script type="text/javascript">
+    let f = function() {
+        console.log(document.getElementById('btn-input').value);
+        let text = document.getElementById('btn-input').value;
+        document.getElementById('btn-input').value = "";
+        var node = document.createElement("li");
+        node.className = "right clearfix";
+        node.innerHTML = "<div style='text-align: right'><img src='/static/img/user.png' height='60px' width='60px' class='img-circle'/><strong>You:</strong> " + text + "</div>";
+        document.getElementById('userchat').appendChild(node);
+
+        
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", '/api/chat/receive?text=' + text, false ); // false for synchronous request
+        xmlHttp.send( null );
+        let dat = xmlHttp.responseText;
+        console.log(JSON.parse(dat)["text"]);
+        var node = document.createElement("li");
+        node.className = "right clearfix";
+        node.innerHTML = "<div style='text-align: left'><img src='/static/img/avatarcnsrg-800.png' height='60px' width='60px' class='img-circle'/><strong>YuCo:</strong> " + JSON.parse(dat)["text"] + "</div>";
+        document.getElementById('userchat').appendChild(node);
+    }
+
+    </script>
+
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
 
@@ -165,7 +160,9 @@
     <script src="/static/vendor/raphael/raphael.min.js"></script>
     <script src="/static/vendor/morrisjs/morris.min.js"></script>
     <script src="/static/data/morris-data.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
+    
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
