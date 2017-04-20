@@ -30,7 +30,8 @@ jinja_options.update(dict(
 app.jinja_options = jinja_options
 
 # Algorithmia setup
-apiKey = 'simwZCh9tS6b81wSwLtrdIauZhi1'
+# apiKey = 'simwZCh9tS6b81wSwLtrdIauZhi1'
+apiKey = 'sim1ulkiERNnkZbh+wYGWAQry3M1'
 client = Algorithmia.client(apiKey)
 algo = client.algo('StanfordNLP/Lemmatizer/0.1.0')
 algo2 = client.algo('nlp/SentimentAnalysis/0.1.2')
@@ -38,8 +39,17 @@ algo3 = client.algo('nlp/AutoTag/1.0.0')
 algo4 = client.algo('nlp/ProfanityDetection/0.1.2')
 
 # ChatBot Stuff
-chatbot = ChatBot('Ahuna',trainer='chatterbot.trainers.ChatterBotCorpusTrainer', storage_adapter="chatterbot.storage.JsonFileStorageAdapter", database="./database.json")
+chatbot = ChatBot(
+	'yourCompanion',
+	trainer='chatterbot.trainers.ChatterBotCorpusTrainer', 
+	storage_adapter="chatterbot.storage.JsonFileStorageAdapter", 
+	logic_adapters=[
+        'chatterbot.logic.MathematicalEvaluation',
+        'chatterbot.logic.TimeLogicAdapter'
+    ],
+	database="./database.json")
 # chatbot.train("chatterbot.corpus.english.conversations")
+# chatbot.train("chatterbot.corpus.english.greetings")
 chatbot.set_trainer(ListTrainer)
 
 for conversation in conversations:
