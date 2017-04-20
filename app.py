@@ -12,18 +12,18 @@ yourCompanion = Flask(__name__)
 proxies = {'http':'http://202.141.80.24:3128', 'https':'https://202.141.80.24:3128'}
 auth = requests.auth.HTTPProxyAuth('username', 'passwd')
 
-# Changes Jinja's expression blocks so angular can work
-jinja_options = yourCompanion.jinja_options.copy()
-jinja_options.update(dict(block_start_string='<%',block_end_string='%>',variable_start_string='%%',variable_end_string='%%',comment_start_string='<#',comment_end_string='#>',))
-yourCompanion.jinja_options = jinja_options
+# Setup Jinja
+options = yourCompanion.jinja_options.copy()
+options.update(dict(block_start_string='<%',block_end_string='%>',variable_start_string='%%',variable_end_string='%%',comment_start_string='<#',comment_end_string='#>',))
+yourCompanion.jinja_options = options
 
 # Setup Algorithmia
 apiKey = 'sim1ulkiERNnkZbh+wYGWAQry3M1'
-client = Algorithmia.client(apiKey)
-lemmatizerAlgo= client.algo('StanfordNLP/Lemmatizer/0.1.0')
-sentimentDetector = client.algo('nlp/SentimentAnalysis/0.1.2')
-tagger = client.algo('nlp/AutoTag/1.0.0')
-profanityDetector = client.algo('nlp/ProfanityDetection/0.1.2')
+callAlgo = Algorithmia.client(apiKey)
+lemmatizerAlgo= callAlgo.algo('StanfordNLP/Lemmatizer/0.1.0')
+sentimentDetector = callAlgo.algo('nlp/SentimentAnalysis/1.0.3')
+tagger = callAlgo.algo('nlp/AutoTag/1.0.1')
+profanityDetector = callAlgo.algo('nlp/ProfanityDetection/1.0.0')
 
 # ChatBot Stuff
 chatbot=ChatBot('yourCompanion',trainer='chatterbot.trainers.ChatterBotCorpusTrainer',storage_adapter="chatterbot.storage.JsonFileStorageAdapter",database="./database.json")
@@ -33,7 +33,7 @@ for conversation in conversations:
 	chatbot.train(conversation)
 
 
-# Main front-end endpoint
+# Setup front end
 @yourCompanion.route('/')
 def intro():
 	return render_template('chat.html')
