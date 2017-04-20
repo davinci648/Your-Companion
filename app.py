@@ -33,10 +33,10 @@ app.jinja_options = jinja_options
 # apiKey = 'simwZCh9tS6b81wSwLtrdIauZhi1'
 apiKey = 'sim1ulkiERNnkZbh+wYGWAQry3M1'
 client = Algorithmia.client(apiKey)
-algo = client.algo('StanfordNLP/Lemmatizer/0.1.0')
-algo2 = client.algo('nlp/SentimentAnalysis/0.1.2')
-algo3 = client.algo('nlp/AutoTag/1.0.0')
-algo4 = client.algo('nlp/ProfanityDetection/0.1.2')
+lemmatizerAlgo= client.algo('StanfordNLP/Lemmatizer/0.1.0')
+sentimentDetector = client.algo('nlp/SentimentAnalysis/0.1.2')
+tagger = client.algo('nlp/AutoTag/1.0.0')
+profanityDetector = client.algo('nlp/ProfanityDetection/0.1.2')
 
 # ChatBot Stuff
 chatbot = ChatBot(
@@ -134,18 +134,18 @@ concerned_option = ["Oh no. Tell me more.", "What's up?", "Is something wrong?",
 @app.route('/api/chat/receive', methods=['GET'])
 def process_message():
 	text = request.values.get('text')
-	response = algo2.pipe(text)
+	response = sentimentDetector.pipe(text)
 	result = response.result
 	if result >= 2: # Good, Okay, or Conversational
 		res = chatbot.get_response(text).text
-		res_prof = algo4.pipe(res).result
+		res_prof = profanityDetector.pipe(res).result
 		if len(res_prof) != 0:
 			res = "Sorry, I couldn't understand that."
 		return jsonify({'text': res})
 	else: # Poor to extremely bad
 		res = None
-		con = algo.pipe(text)
-		tags = algo3.pipe(con.result)
+		con = lemmatizerAlgo.pipe(text)
+		tags = tagger.pipe(con.result)
 		for a in tags.result:
 			for x in mainTags:
 				for y in mainTags[x]:
