@@ -10,7 +10,7 @@ import requests,Algorithmia, random, json, requests
 yourCompanion = Flask(__name__)
 
 proxies = {'http':'http://202.141.80.24:3128', 'https':'https://202.141.80.24:3128'}
-auth = requests.auth.HTTPProxyAuth('username', 'passwd')
+auth = requests.auth.HTTPProxyAuth('p.shetty', 'hacker6pro')
 
 # Setup Jinja
 options = yourCompanion.jinja_options.copy()
@@ -58,7 +58,7 @@ def recommend_comedy_mov():
 	data = r.json()
 	print data
 	print "==========================================================="
-	return str('<img src=\'') + str(data['Poster']) + str('\'/> <p>') + str(data['Title']) + str('</p>')
+	return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
 
 @yourCompanion.route('/mot_mov', methods=['POST','GET'])
 def recommend_motivational_mov():
@@ -79,7 +79,7 @@ def recommend_motivational_mov():
 	data = r.json()
 	print data
 	print "==========================================================="
-	return str('<img src=\'') + str(data['Poster']) + str('\'/> <p>') + str(data['Title']) + str('</p>')
+	return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
 
 @yourCompanion.route('/feel_good_mov', methods=['POST','GET'])
 def recommend_feel_good_mov():
@@ -92,15 +92,17 @@ def recommend_feel_good_mov():
 	#with requests_cache.enabled('movie_cache', backend='sqlite', expire_after=86400):
 
 	temp = 'http://www.omdbapi.com/?t=' + str(random.choice(feel_good_mov_list)) + '&plot=full&r=json'
-	print temp
+	#print temp
 	#r = requests.get(temp)
 
 	r = requests.get(temp, proxies = proxies, auth = auth)
 
 	data = r.json()
-	print data
+	#print data
 	print "==========================================================="
-	return str('<img src=\'') + str(data['Poster']) + str('\'/> <p>') + str(data['Title']) + str('</p>')
+	return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
+	#print temp1
+	#return temp1
 
 
 mainTags = {0: {0:'panic attack',1:'panic'},1:{0:'suicide',1: 'kill'},2:{0:'break'}} 

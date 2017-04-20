@@ -183,7 +183,7 @@
     <script type="text/javascript">
         let feel_good_mov_recomm = function(){
         let xmlHttp_feel_good_mov = new XMLHttpRequest();
-        xmlHttp_feel_good_mov.open( "GET", '/com_mov', false ); // false for synchronous request
+        xmlHttp_feel_good_mov.open( "GET", '/feel_good_mov', false ); // false for synchronous request
         xmlHttp_feel_good_mov.send( null );
 
         let dat_feel_good_mov = xmlHttp_feel_good_mov.responseText;
@@ -191,7 +191,7 @@
         console.log("I'm Here\n");
         var node = document.getElementById('mov_output');
         document.getElementById('mov_output').value = "";
-        node.innerHTML = "<p> "+ dat_feel_good_mov +" </p>";
+        node.innerHTML = dat_feel_good_mov;
         }
     </script>
 
