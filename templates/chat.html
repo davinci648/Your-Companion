@@ -108,11 +108,11 @@
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Recommend Song</a>
                                         </h4>
                                     </div>
-                                    <button type="button" class="btn btn-default">Comedy</button>
-                            <button type="button" class="btn btn-default">Motivational</button>
-                            <button type="button" class="btn btn-default">Feel-Good</button>
-                                    <div id="collapseTwo" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                    <button id="mot_song" type="button" class="btn btn-default" onclick="mot_song_recomm()">Motivational</button>
+                            <button id="pop_song" type="button" class="btn btn-default" onclick="pop_song_recomm()">Pop</button>
+                            <button id="rock_song" type="button" class="btn btn-default" onclick="rock_song_recomm()">Rock</button>
+                                    <div id="collapseTwo" class="panel-collapse collapse in">
+                                        <div id="song_output" class="panel-body">
                                         </div>
                                     </div>
                                 </div>
@@ -195,6 +195,50 @@
         }
     </script>
 
+    <script type="text/javascript">
+        let mot_song_recomm = function(){
+        let xmlHttp_mot_song = new XMLHttpRequest();
+        xmlHttp_mot_song.open( "GET", '/mot_song', false ); // false for synchronous request
+        xmlHttp_mot_song.send( null );
+
+        let dat_mot_song = xmlHttp_mot_song.responseText;
+
+        console.log("I'm Here\n");
+        var node_song = document.getElementById('song_output');
+        document.getElementById('song_output').value = "";
+        node_song.innerHTML = "<p> "+ dat_mot_song +" </p>";
+        }
+    </script>  
+
+    <script type="text/javascript">
+        let pop_song_recomm = function(){
+        let xmlHttp_pop_song = new XMLHttpRequest();
+        xmlHttp_pop_song.open( "GET", '/pop_song', false ); // false for synchronous request
+        xmlHttp_pop_song.send( null );
+
+        let dat_pop_song = xmlHttp_pop_song.responseText;
+
+        console.log("I'm Here\n");
+        var node_song = document.getElementById('song_output');
+        document.getElementById('song_output').value = "";
+        node_song.innerHTML = "<p> "+ dat_pop_song +" </p>";
+        }
+    </script>      
+
+    <script type="text/javascript">
+        let rock_song_recomm = function(){
+        let xmlHttp_rock_song = new XMLHttpRequest();
+        xmlHttp_rock_song.open( "GET", '/rock_song', false ); // false for synchronous request
+        xmlHttp_rock_song.send( null );
+
+        let dat_rock_song = xmlHttp_rock_song.responseText;
+
+        console.log("I'm Here " + dat_rock_song + "\n");
+        var node_song = document.getElementById('song_output');
+        document.getElementById('song_output').value = "";
+        node_song.innerHTML = "<p> "+ dat_rock_song +" </p>";
+        }
+    </script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>

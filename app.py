@@ -10,7 +10,7 @@ import requests,Algorithmia, random, json, requests
 yourCompanion = Flask(__name__)
 
 proxies = {'http':'http://202.141.80.24:3128', 'https':'https://202.141.80.24:3128'}
-auth = requests.auth.HTTPProxyAuth('p.shetty', 'hacker6pro')
+auth = requests.auth.HTTPProxyAuth('p.shetty', 'hacker6pr1')
 
 # Setup Jinja
 options = yourCompanion.jinja_options.copy()
@@ -104,6 +104,33 @@ def recommend_feel_good_mov():
 	#print temp1
 	#return temp1
 
+@yourCompanion.route('/mot_song', methods=['POST','GET'])
+def recommend_motivational_song():
+	file = open("motivational_song.txt",'r')
+	mot_song_list = []
+	for line in file.readlines():
+		mot_song_list.append(line)
+	print "==========================================================="
+	return str(random.choice(mot_song_list))	
+
+@yourCompanion.route('/pop_song', methods=['POST','GET'])
+def recommend_pop_song():
+	file = open("pop_song.txt",'r')
+	pop_song_list = []
+	for line in file.readlines():
+		pop_song_list.append(line)
+	print "==========================================================="
+	return str(random.choice(pop_song_list))
+
+@yourCompanion.route('/rock_song', methods=['POST','GET'])
+def recommend_rock_song():
+	file = open("rock_song.txt",'r')
+	rock_song_list = []
+	for line in file.readlines():
+		rock_song_list.append(line)
+	print "==========================================================="
+	print str(random.choice(rock_song_list))
+	return str(random.choice(rock_song_list))		
 
 mainTags = {0: {0:'panic attack',1:'panic'},1:{0:'suicide',1: 'kill'},2:{0:'break'}} 
 # To check which helpline the person should be pointed to.
