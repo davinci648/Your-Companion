@@ -52,13 +52,16 @@ def recommend_comedy_mov():
 	temp = 'http://www.omdbapi.com/?t=' + str(random.choice(com_mov_list)) + '&plot=full&r=json'
 	print temp
 	#r = requests.get(temp)
+	try:
+		r = requests.get(temp, proxies = proxies, auth = auth)
 
-	r = requests.get(temp, proxies = proxies, auth = auth)
+		data = r.json()
+		print data
+		print "==========================================================="
+		return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
+	except:
+		return str('<p>Unable to connect to internet.</p>')
 
-	data = r.json()
-	print data
-	print "==========================================================="
-	return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
 
 @yourCompanion.route('/mot_mov', methods=['POST','GET'])
 def recommend_motivational_mov():
@@ -73,13 +76,16 @@ def recommend_motivational_mov():
 	temp = 'http://www.omdbapi.com/?t=' + str(random.choice(mot_mov_list)) + '&plot=full&r=json'
 	print temp
 	#r = requests.get(temp)
+	try:
+		r = requests.get(temp, proxies = proxies, auth = auth)
 
-	r = requests.get(temp, proxies = proxies, auth = auth)
+		data = r.json()
+		print data
+		print "==========================================================="
+		return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
+	except:
+		return str('<p>Unable to connect to internet.</p>')
 
-	data = r.json()
-	print data
-	print "==========================================================="
-	return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
 
 @yourCompanion.route('/feel_good_mov', methods=['POST','GET'])
 def recommend_feel_good_mov():
@@ -94,15 +100,18 @@ def recommend_feel_good_mov():
 	temp = 'http://www.omdbapi.com/?t=' + str(random.choice(feel_good_mov_list)) + '&plot=full&r=json'
 	#print temp
 	#r = requests.get(temp)
+	try:
+		r = requests.get(temp, proxies = proxies, auth = auth)
 
-	r = requests.get(temp, proxies = proxies, auth = auth)
+		data = r.json()
+		#print data
+		print "==========================================================="
+		return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
+		#print temp1
+		#return temp1
+	except:
+		return str('<p>Unable to connect to internet.</p>')
 
-	data = r.json()
-	#print data
-	print "==========================================================="
-	return str('<div style=\'text-align: left; float: left\'>"<img src=\'') + str(data['Poster']) + str('\'/></div> <div style=\'text-align: right; float: right; max-width: 600px\'><a href=\'http://www.imdb.com/title/' + str(data['imdbID'])) + str('/\'><strong>') + str(data['Title']) + str('</strong></a><p>')+ str(data['Plot']) +str('</p></div>')
-	#print temp1
-	#return temp1
 
 @yourCompanion.route('/mot_song', methods=['POST','GET'])
 def recommend_motivational_song():
