@@ -9,8 +9,8 @@ import requests,Algorithmia, random, json, requests
 # Declares flask app
 yourCompanion = Flask(__name__)
 
-proxies = {'http':'http://202.141.80.24:3128', 'https':'https://202.141.80.24:3128'}
-auth = requests.auth.HTTPProxyAuth('p.shetty', 'hacker6pr1')
+proxies = {'http':'http://172.16.114.220:3128', 'https':'https://172.16.114.220:3128'}
+auth = requests.auth.HTTPProxyAuth('abc', 'xyz')
 
 # Setup Jinja
 options = yourCompanion.jinja_options.copy()
@@ -137,16 +137,16 @@ mainTags = {0: {0:'panic attack',1:'panic'},1:{0:'suicide',1: 'kill'},2:{0:'brea
 helplines = {
  	0: 
  		{		# For panic attacks
- 			0:{'type':'url','data':'www.welcomecure.com'}, 
- 		 	1:{'type':'phone-number','data': '9833598553'}}, 
+ 			0:{'type':'url','data':'Please go to www.welcomecure.com'}, 
+ 		 	1:{'type':'phone-number','data': 'Please call 9833598553'}}, 
 	1: 
  	 	{      # For suicide prevention
- 	 		0:{'type':'url','data':'www.vandrevalafoundation.com'}, 
- 	 		1:{'type':'phone-number','data':'18602662345'}},
+ 	 		0:{'type':'url','data':'I highly recommend you to go to www.vandrevalafoundation.com'}, 
+ 	 		1:{'type':'phone-number','data':'Please call 18602662345'}},
  	 2: 
  	 	{     # For love and breakup related incidents
- 	 		0:{'type':'url','data':'www.therulesrevisited.com'}, 
- 	 		1:{'type':'phone-number','data':'18602662345'}},
+ 	 		0:{'type':'url','data':'This website might help you. www.therulesrevisited.com'}, 
+ 	 		1:{'type':'phone-number','data':'Please call 18602662345'}},
  }
 
 #To show that the chatbot is concerned . It creates a more informal and caring "artificial" attitude of the chatbot.
@@ -173,12 +173,12 @@ def process_message():
 		tags = tagger.pipe(lemmatizerAlgo.pipe(inputUser).result)
 		for tag in tags.result:
 			for x_i in mainTags:
-				for y_i in mainTags[x]:
+				for y_i in mainTags[x_i]:
 					if tag == mainTags[x_i][y_i]:
 						randomInt = randint(0,1)
 						outputUser = helplines[x_i][randomInt]['data']
 		if outputUser is None:
-			outputUser = concerned_options[randint(0,6)]
+			outputUser = concerned_options[randint(0,len(concerned_options)-1)]
 		return jsonify({'text':outputUser})
 
 

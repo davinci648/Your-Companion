@@ -24,8 +24,7 @@ conversations = [
 
 [
  "I want to die.",
- "It sounds like you are thinking of doing something drastic.",
- "Are you feeling you can't cope up anymore",
+ "It sounds like you are thinking of doing something drastic. Are you feeling you can't cope up anymore?",
  "Yes I can't cope anymore",
  "I am a bot, and not able to deal with life-threatening situations. \
  Please call one of these helplines or pick one from a comprehensive list of helplines here: 109",
